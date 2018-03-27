@@ -275,4 +275,15 @@ public class ClientGameView extends JFrame {
 	public void resetTimer() {
 		this.sec = 0;
 	}
+
+	public void refresh(int[][] board){
+		for(int i = 0; i < board.length; i++){
+			for(int j = 0; j < board.length; j++){
+				if(board[i][j] == 1) getCellAt(i,j).setText("X");
+				else if(board[i][j] == 0) getCellAt(i,j).setText("O");
+				else getCellAt(i,j).setText("");
+
+			}
+		}
+	}
 }

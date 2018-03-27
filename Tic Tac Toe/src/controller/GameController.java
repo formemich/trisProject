@@ -78,29 +78,15 @@ public class GameController implements ActionListener {
 		if (gameView.contains(gameView.getCells(), (JButton) e.getSource())) {
 			if (player2.isIA()) {
 				gameModel.setOwner(player1);
-				((JButton) e.getSource()).setEnabled(false);
-				((JButton) e.getSource()).setText(gameModel.convertSymbol(gameModel.getOwner().getSign()));
-				gameModel.getBoard()[gameView.getX()][gameView.getY()] = gameModel.getOwner().getSign();
+				setCell(gameView.getX(),gameView.getY());
 				gameModel.proceed();
-				if (gameModel.checkWinner()) {
-					gameView.getTimer().stop();
-					JOptionPane.showMessageDialog(gameView,
-							"Ha vinto il giocatore 1\nTurni: " + gameModel.getMovesCounter() + "\nTempo: "
-									+ gameView.getMinLbl().getText() + ":" + gameView.getSecLbl().getText());
-					gameView.dispose();
-					gameModel.setJustPlayed(true);
-					startGameView.setVisible(true);
-					proceed = false;
-				} else if (gameModel.getMovesCounter() == 9) {
-					gameView.getTimer().stop();
-					JOptionPane.showMessageDialog(gameView, "Pareggio!\nTurni: " + gameModel.getMovesCounter()
-							+ "\nTempo: " + gameView.getMinLbl().getText() + ":" + gameView.getSecLbl().getText());
-					gameView.dispose();
-					gameModel.setJustPlayed(true);
-					startGameView.setVisible(true);
-					proceed = false;
-				}
-
+					if (gameModel.checkWinner()) {
+						player1Won();
+						proceed = false;
+					} else if (gameModel.getMovesCounter() == 9) {
+						nobodyWon();
+						proceed = false;
+					}
 				boolean done = false;
 				if (proceed) {
 					do {
@@ -109,32 +95,13 @@ public class GameController implements ActionListener {
 							int x = artificialIntelligence.getX();
 							int y = artificialIntelligence.getY();
 							if (gameView.getCellAt(x, y).isEnabled()) {
-								gameView.getCellAt(x, y)
-										.setText(gameModel.convertSymbol(gameModel.getOwner().getSign()));
-								gameView.getCellAt(x, y).setEnabled(false);
-								gameModel.getBoard()[x][y] = gameModel.getOwner().getSign();
+								setCell(x,y);
 								gameModel.proceed();
 								done = true;
 								if (gameModel.checkWinner()) {
-									gameView.getTimer().stop();
-									JOptionPane.showMessageDialog(gameView,
-											"Ha vinto il giocatore 2\nTurni: " + gameModel.getMovesCounter()
-													+ "\nTempo: " + gameView.getMinLbl().getText() + ":"
-													+ gameView.getSecLbl().getText());
-									gameModel.setMovesCounter(0);
-									gameView.dispose();
-									gameModel.setJustPlayed(true);
-									startGameView.setVisible(true);
+									player2Won();
 								} else if (gameModel.getMovesCounter() == 9) {
-									gameView.getTimer().stop();
-									JOptionPane.showMessageDialog(gameView,
-											"Pareggio!\nTurni: " + gameModel.getMovesCounter() + "\nTempo: "
-													+ gameView.getMinLbl().getText() + ":"
-													+ gameView.getSecLbl().getText());
-									gameModel.setMovesCounter(0);
-									gameView.dispose();
-									gameModel.setJustPlayed(true);
-									startGameView.setVisible(true);
+									nobodyWon();
 								}
 							}
 						}
@@ -147,7 +114,43 @@ public class GameController implements ActionListener {
 						}
 					}
 				}
+			}else{
+				gameModel.setOwner(player1);
+				setCell(gameView.getX(),gameView.getY());
+				gameModel.proceed();
+				if (gameModel.checkWinner()) {
+					player1Won();
+					proceed = false;
+				} else if (gameModel.getMovesCounter() == 9) {
+					nobodyWon();
+					proceed = false;
+				}
+				boolean done = false;
+				if (proceed) {
+					do {
+						if (gameModel.getMovesCounter() < 9) {
+							gameModel.setOwner(player2);
+							//server.refreshBoard();
+							gameModel.proceed();
+								done = true;
+								if (gameModel.checkWinner()) {
+									player2Won();
+								} else if (gameModel.getMovesCounter() == 9) {
+									nobodyWon();
+								}
+
+						}
+					} while (!done);
+				}
+				if (gameModel.endGame()) {
+					for (JButton[] btn : gameView.getCells()) {
+						for (JButton button : btn) {
+							button.setEnabled(false);
+						}
+					}
+				}
 			}
+			/////////////////////dovrei giocare con remoto
 		}
 
 		if (e.getSource().equals(userLoginView.getSendBtn())) {
@@ -184,7 +187,11 @@ public class GameController implements ActionListener {
 			}
 		}
 		if(e.getSource().equals(startGameView.getMultiButton())){
-			server.handleConnection();
+
+				server.handleConnection();
+
+			gameView.setVisible(true);
+
 
 		}
 		if (e.getSource().equals(gameView.getExitBtn())) {
@@ -201,5 +208,44 @@ public class GameController implements ActionListener {
 		if (e.getSource().equals(startGameView.getExitBtn())) {
 			System.exit(0);
 		}
+	}
+	public int[][] getBoard(){
+		return gameModel.getBoard();
+	}
+	public void setBoard(int[][] board){
+		 gameModel.setBoard(board);
+	}
+	public void player1Won(){
+		gameView.getTimer().stop();
+		JOptionPane.showMessageDialog(gameView,
+				"Ha vinto il giocatore 1\nTurni: " + gameModel.getMovesCounter() + "\nTempo: "
+						+ gameView.getMinLbl().getText() + ":" + gameView.getSecLbl().getText());
+		gameView.dispose();
+		gameModel.setJustPlayed(true);
+		startGameView.setVisible(true);
+	}
+	public void player2Won(){
+		gameView.getTimer().stop();
+		JOptionPane.showMessageDialog(gameView,
+				"Ha vinto il giocatore 2\nTurni: " + gameModel.getMovesCounter()
+						+ "\nTempo: " + gameView.getMinLbl().getText() + ":"
+						+ gameView.getSecLbl().getText());
+		gameModel.setMovesCounter(0);
+		gameView.dispose();
+		gameModel.setJustPlayed(true);
+		startGameView.setVisible(true);
+	}
+	public void nobodyWon(){
+		gameView.getTimer().stop();
+		JOptionPane.showMessageDialog(gameView, "Pareggio!\nTurni: " + gameModel.getMovesCounter()
+				+ "\nTempo: " + gameView.getMinLbl().getText() + ":" + gameView.getSecLbl().getText());
+		gameView.dispose();
+		gameModel.setJustPlayed(true);
+		startGameView.setVisible(true);
+	}
+	public void setCell(int x,int y){
+		gameView.getCellAt(x,y).setEnabled(false);
+		gameView.getCellAt(x,y).setText(gameModel.convertSymbol(gameModel.getOwner().getSign()));
+		gameModel.setMove(x,y,gameModel.getOwner());
 	}
 }

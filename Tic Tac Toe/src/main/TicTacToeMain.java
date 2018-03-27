@@ -30,6 +30,8 @@ public class TicTacToeMain {
 		GameController gameController = new GameController(gameModel, player1, player2, userLoginView, startGameView, gameView, artificialIntelligence, server);
 		gameController.addActionListeners();
 
+		server.setGameController(gameController);
+
 
 	}
 

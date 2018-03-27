@@ -12,12 +12,24 @@ public class Controller implements ActionListener {
 	private ClientGameView clientGameView;
 	private int board[][];
 
-	public static int[][] getBoard() {
+	public int[][] getBoard() {
 		return board;
+	}
+
+	public void refreshBoard(){
+		for (int i = 0; i < clientGameView.getCells().length; i++) {
+			for (int j = 0; j < clientGameView.getCells().length; j++) {
+				if(clientGameView.getCellAt(i,j).getText().equals("X")) getBoard()[i][j] = 1;
+				else if(clientGameView.getCellAt(i,j).getText().equals("O")) getBoard()[i][j] = 0;
+				else getBoard()[i][j] = -1;
+
+			}
+		}
 	}
 
 	public void setBoard(int[][] board) {
 		this.board = board;
+		clientGameView.refresh(board);
 	}
 
 	public Controller(Client client, ClientGameView	clientGameview) {
@@ -41,6 +53,8 @@ public class Controller implements ActionListener {
 		if (clientGameView.contains(clientGameView.getCells(), (JButton) e.getSource())) {
 			((JButton) e.getSource()).setEnabled(false);
 			((JButton) e.getSource()).setText("X");
+			refreshBoard();
+			client.setBoard(board);
 			
 		}
 		if (e.getSource().equals(clientGameView.getExitBtn())) {

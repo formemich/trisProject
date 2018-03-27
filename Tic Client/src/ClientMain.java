@@ -9,8 +9,10 @@ public class ClientMain {
         Client client = new Client();
         clientgameView.setVisible(true);
         client.setClient();
-        Controller Controller = new Controller(client, clientgameView);
-        Controller.addActionListeners();
+        Controller controller = new Controller(client, clientgameView);
+        controller.addActionListeners();
+
+        client.setController(controller);
 
 
     }
