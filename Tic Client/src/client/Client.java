@@ -21,10 +21,31 @@ public class Client{
 
             InetAddress host = InetAddress.getLocalHost();
             Socket socket = new Socket(host.getHostName(), 1050);
+<<<<<<< HEAD
             sendObj(board, socket);
             receiveObj(board, socket);
 
 
+=======
+            int[][] board;
+
+            //
+            // Send a message to the client application
+            //
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            oos.writeObject("Hello There...");
+
+            //
+            // Read and display the response message sent by server application
+            //
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+//            board = (Controller.getBoard());
+            ois.readObject();
+            System.out.println("Message: board created");
+
+            ois.close();
+            oos.close();
+>>>>>>> fa289f0ddeeff43603c980a691aef8ccec988717
         } catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (IOException e) {
