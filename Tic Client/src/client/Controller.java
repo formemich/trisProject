@@ -12,7 +12,7 @@ public class Controller implements ActionListener {
 	private ClientGameView clientGameView;
 	private int board[][];
 
-	public static int[][] getBoard() {
+	public int[][] getBoard() {
 		return board;
 	}
 

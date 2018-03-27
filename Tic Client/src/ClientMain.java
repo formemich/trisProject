@@ -11,8 +11,6 @@ public class ClientMain {
         client.setClient();
         Controller Controller = new Controller(client, clientgameView);
         Controller.addActionListeners();
-
-
     }
 
 }

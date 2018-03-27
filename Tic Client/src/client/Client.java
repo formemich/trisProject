@@ -28,7 +28,7 @@ public class Client{
             // Read and display the response message sent by server application
             //
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-            board = (Controller.getBoard());
+//            board = (Controller.getBoard());
             ois.readObject();
             System.out.println("Message: board created");
 

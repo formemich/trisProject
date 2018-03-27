@@ -108,7 +108,7 @@ public class StartGameView extends JFrame {
 		gbl_leftPnl.rowWeights = new double[] { 0.0, 1.0, 1.0, 0.0, 1.0, Double.MIN_VALUE };
 		leftPnl.setLayout(gbl_leftPnl);
 
-		JLabel diffLbl = new JLabel("Scegli la difficoltà:");
+		JLabel diffLbl = new JLabel("Scegli la difficolt\u00E0\u00A0:");
 		diffLbl.setFont(new Font("SFNS Display", Font.BOLD, 15));
 		diffLbl.setForeground(Color.WHITE);
 		GridBagConstraints gbc_diffLbl = new GridBagConstraints();
@@ -225,6 +225,7 @@ public class StartGameView extends JFrame {
 		buttonsPnl.setLayout(gbl_buttonsPnl);
 
 		xBtn = new JRadioButton("X");
+		xBtn.setOpaque(false);
 		xBtn.setEnabled(false);
 		xBtn.setHorizontalAlignment(SwingConstants.CENTER);
 		xBtn.setForeground(Color.WHITE);
@@ -237,6 +238,7 @@ public class StartGameView extends JFrame {
 		buttonsPnl.add(xBtn, gbc_xBtn);
 
 		oBtn = new JRadioButton("O");
+		oBtn.setOpaque(false);
 		oBtn.setEnabled(false);
 		oBtn.setHorizontalAlignment(SwingConstants.CENTER);
 		oBtn.setForeground(Color.WHITE);
@@ -280,7 +282,7 @@ public class StartGameView extends JFrame {
 		gbl_multiPnl.rowWeights = new double[] { 1.0, 0.0, 1.0, Double.MIN_VALUE };
 		multiPnl.setLayout(gbl_multiPnl);
 
-		JLabel multiHeadLbl = new JLabel("Seleziona Giocatore Avversario:");
+		JLabel multiHeadLbl = new JLabel("Premi sul bottone quando appare la scritta di connessione stabilita:");
 		multiHeadLbl.setHorizontalAlignment(SwingConstants.CENTER);
 		multiHeadLbl.setForeground(Color.WHITE);
 		multiHeadLbl.setFont(new Font("SFNS Display", Font.BOLD, 13));
@@ -290,20 +292,16 @@ public class StartGameView extends JFrame {
 		gbc_multiHeadLbl.gridx = 0;
 		gbc_multiHeadLbl.gridy = 0;
 		multiPnl.add(multiHeadLbl, gbc_multiHeadLbl);
-
-		JList<String> multiList = new JList<String>();
-		multiList.setEnabled(false);
-		multiList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		multiList.setSelectionBackground(SystemColor.textHighlight);
-		multiList.setForeground(Color.BLACK);
-		multiList.setFont(new Font("Arial", Font.PLAIN, 15));
-		multiList.setBackground(Color.WHITE);
-		GridBagConstraints gbc_multiList = new GridBagConstraints();
-		gbc_multiList.insets = new Insets(0, 0, 5, 0);
-		gbc_multiList.fill = GridBagConstraints.BOTH;
-		gbc_multiList.gridx = 0;
-		gbc_multiList.gridy = 1;
-		multiPnl.add(multiList, gbc_multiList);
+		
+		JLabel connectionLbl = new JLabel("In attesa di connessione...");
+		connectionLbl.setFont(new Font("Dialog", Font.PLAIN, 13));
+		connectionLbl.setForeground(Color.RED);
+		GridBagConstraints gbc_connectionLbl = new GridBagConstraints();
+		gbc_connectionLbl.anchor = GridBagConstraints.WEST;
+		gbc_connectionLbl.insets = new Insets(0, 0, 5, 0);
+		gbc_connectionLbl.gridx = 0;
+		gbc_connectionLbl.gridy = 1;
+		multiPnl.add(connectionLbl, gbc_connectionLbl);
 
 		sendMPBtn = new JButton("Gioca");
 		sendMPBtn.setEnabled(false);
@@ -335,7 +333,6 @@ public class StartGameView extends JFrame {
 				xBtn.setEnabled(true);
 				oBtn.setEnabled(true);
 				sendSPBtn.setEnabled(true);
-				multiList.setEnabled(false);
 				sendMPBtn.setEnabled(false);
 				SwingUtilities.updateComponentTreeUI(contentPane);
 			}
@@ -348,7 +345,6 @@ public class StartGameView extends JFrame {
 				xBtn.setEnabled(false);
 				oBtn.setEnabled(false);
 				sendSPBtn.setEnabled(false);
-				multiList.setEnabled(true);
 				sendMPBtn.setEnabled(true);
 				SwingUtilities.updateComponentTreeUI(contentPane);
 			}
